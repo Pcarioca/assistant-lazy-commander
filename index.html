@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistant Lazy Commander</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1f2937">
+  <style>
+    :root {
+      --gap: 12px;
+      --card-bg: #13141b;
+      --card-border: #1e212a;
+      --primary: #36d399;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+      background: #0b0c10;
+      color: #f5f7fb;
+      line-height: 1.45;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background: #111217;
+      border-bottom: 1px solid #20222b;
+      padding: 14px 16px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      z-index: 10;
+    }
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card, details.card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    summary {
+      cursor: pointer;
+      list-style: none;
+      outline: none;
+    }
+    summary h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    details.card summary::-webkit-details-marker { display: none; }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gap);
+      margin-top: 8px;
+    }
+    .row button {
+      flex: 1 1 calc(33.333% - var(--gap));
+      margin-bottom: 8px;
+    }
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: var(--primary);
+      color: #0b0c10;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #2a2d39;
+      color: #f5f7fb;
+    }
+    button.danger {
+      background: #ef4444;
+      color: #fff;
+    }
+    button.color {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      flex: 0 0 auto;
+    }
+    input[type="range"] {
+      width: 100%;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #2a2d39;
+      background: #0f1016;
+      color: #f5f7fb;
+      font-size: 16px;
+    }
+    .label {
+      font-size: 14px;
+      color: #aeb3c2;
+      margin-bottom: 4px;
+    }
+    .muted {
+      color: #a0a6b7;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+    .chip {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #2a2d39;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Assistant Lazy Commander
+  </header>
+  <main>
+    <p class="muted">
+      Use the menus below to speak commands to your Google Assistant or Gemini‑enabled devices. Buttons will speak commands through your device's speaker. Whether the Assistant responds depends on your setup—no promises. Explore lights, thermostats, timers, media, information, broadcasts, fun easter eggs, system controls, and more. Tune the voice to your liking and get creative!
+    </p>
+
+    <!-- Lights -->
+    <details class="card" open>
+      <summary><h3>Lights</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, turn on the lights">On</button>
+        <button data-say="Hey Google, turn off the lights">Off</button>
+        <button data-say="Hey Google, dim the lights to 50 percent">Dim 50%</button>
+        <button data-say="Hey Google, brighten the lights to 100 percent">Bright 100%</button>
+        <button data-say="Hey Google, set the lights to warm white">Warm White</button>
+      </div>
+      <div class="label" style="margin-top:8px;">Brightness: <span id="brightnessVal">50</span>%</div>
+      <div class="row">
+        <input id="brightnessSlider" type="range" min="1" max="100" value="50">
+        <button id="speakBrightness">Set brightness</button>
+      </div>
+      <div class="label" style="margin-top:8px;">Color:</div>
+      <div class="row" id="colorButtons">
+        <button class="color" style="background:#ef4444;" data-color="red" title="Red"></button>
+        <button class="color" style="background:#f97316;" data-color="orange" title="Orange"></button>
+        <button class="color" style="background:#eab308;" data-color="yellow" title="Yellow"></button>
+        <button class="color" style="background:#22c55e;" data-color="green" title="Green"></button>
+        <button class="color" style="background:#3b82f6;" data-color="blue" title="Blue"></button>
+        <button class="color" style="background:#8b5cf6;" data-color="purple" title="Purple"></button>
+        <button class="color" style="background:#ec4899;" data-color="pink" title="Pink"></button>
+        <button class="color" style="background:#e5e7eb; border:2px solid #1e212a;" data-color="white" title="White"></button>
+      </div>
+    </details>
+
+    <!-- Thermostat -->
+    <details class="card">
+      <summary><h3>Thermostat</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, turn on the thermostat">Turn On</button>
+        <button data-say="Hey Google, turn off the thermostat">Turn Off</button>
+        <button data-say="Hey Google, increase the temperature by 1 degree">Increase 1°</button>
+        <button data-say="Hey Google, decrease the temperature by 1 degree">Decrease 1°</button>
+      </div>
+      <div class="label" style="margin-top:8px;">Temperature: <span id="tempVal">21</span>°C</div>
+      <div class="row">
+        <input id="thermostatSlider" type="range" min="15" max="30" value="21">
+        <button id="speakThermostat">Set temperature</button>
+      </div>
+    </details>
+
+    <!-- Locks -->
+    <details class="card">
+      <summary><h3>Locks & Doors</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, lock the front door">Lock Front Door</button>
+        <button data-say="Hey Google, unlock the front door">Unlock Front Door</button>
+        <button data-say="Hey Google, lock all the doors">Lock All Doors</button>
+        <button data-say="Hey Google, unlock all the doors">Unlock All Doors</button>
+      </div>
+    </details>
+
+    <!-- Timers & Alarms -->
+    <details class="card">
+      <summary><h3>Timers & Alarms</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, set a 5 minute timer">5m Timer</button>
+        <button data-say="Hey Google, set a 10 minute timer">10m Timer</button>
+        <button data-say="Hey Google, set a 30 minute timer">30m Timer</button>
+        <button data-say="Hey Google, set a 1 hour timer">1h Timer</button>
+        <button data-say="Hey Google, cancel the timer">Cancel Timer</button>
+      </div>
+      <div class="label" style="margin-top:8px;">Custom timer (minutes)</div>
+      <div class="row">
+        <input id="timerVal" type="number" min="1" value="5">
+        <button id="speakTimer">Set custom timer</button>
+      </div>
+      <div class="label" style="margin-top:8px;">Alarms</div>
+      <div class="row">
+        <button data-say="Hey Google, set an alarm for 7 AM">Alarm 7:00</button>
+        <button data-say="Hey Google, set an alarm for 8 AM">Alarm 8:00</button>
+        <button data-say="Hey Google, cancel my alarm">Cancel Alarm</button>
+      </div>
+    </details>
+
+    <!-- Information -->
+    <details class="card">
+      <summary><h3>Information</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, what's the weather today?">Weather</button>
+        <button data-say="Hey Google, what's the time?">Time</button>
+        <button data-say="Hey Google, what's the date today?">Date</button>
+        <button data-say="Hey Google, tell me the news">News</button>
+        <button data-say="Hey Google, how's the traffic to work?">Traffic</button>
+        <button data-say="Hey Google, how's the S and P 500 doing?">Stock Market</button>
+        <button data-say="Hey Google, what's my next meeting?">Next Meeting</button>
+        <button data-say="Hey Google, how many kilometers in a mile?">Unit Conversion</button>
+        <button data-say="Hey Google, who won the Warriors game?">Sports Update</button>
+      </div>
+    </details>
+
+    <!-- Media -->
+    <details class="card">
+      <summary><h3>Media</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, play some music">Play Music</button>
+        <button data-say="Hey Google, play jazz music">Play Jazz</button>
+        <button data-say="Hey Google, play my workout playlist">Play Workout</button>
+        <button data-say="Hey Google, play the news">Play News Audio</button>
+        <button data-say="Hey Google, pause the music">Pause</button>
+        <button data-say="Hey Google, resume the music">Resume</button>
+        <button data-say="Hey Google, stop the music">Stop</button>
+        <button data-say="Hey Google, next song">Next</button>
+        <button data-say="Hey Google, previous song">Previous</button>
+        <button data-say="Hey Google, volume up">Volume Up</button>
+        <button data-say="Hey Google, volume down">Volume Down</button>
+      </div>
+    </details>
+
+    <!-- Broadcast -->
+    <details class="card">
+      <summary><h3>Broadcast</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, broadcast wake everyone up">Wake Up</button>
+        <button data-say="Hey Google, broadcast breakfast is ready">Breakfast</button>
+        <button data-say="Hey Google, broadcast it's lunch time">Lunch</button>
+        <button data-say="Hey Google, broadcast dinner is ready">Dinner</button>
+        <button data-say="Hey Google, broadcast it's movie time">Movie Time</button>
+        <button data-say="Hey Google, broadcast it's time to go to bed">Bedtime</button>
+      </div>
+      <div class="label" style="margin-top:8px;">Custom broadcast</div>
+      <div class="row">
+        <input id="broadcastMsg" type="text" placeholder="your message">
+        <button id="speakBroadcast">Broadcast</button>
+      </div>
+    </details>
+
+    <!-- Fun & Easter Eggs -->
+    <details class="card">
+      <summary><h3>Fun & Easter Eggs</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, tell me a joke">Tell a Joke</button>
+        <button data-say="Hey Google, tell me something interesting">Something Interesting</button>
+        <button data-say="Hey Google, let's play a game">Play a Game</button>
+        <button data-say="Hey Google, I am your father">I am your father</button>
+        <button data-say="Hey Google, self destruct in 3 seconds">Self Destruct</button>
+        <button data-say="Hey Google, who am I?">Who am I?</button>
+      </div>
+    </details>
+
+    <!-- System Controls -->
+    <details class="card">
+      <summary><h3>System Controls</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, turn on the flashlight">Flashlight On</button>
+        <button data-say="Hey Google, turn off the flashlight">Flashlight Off</button>
+        <button data-say="Hey Google, turn on Bluetooth">Bluetooth On</button>
+        <button data-say="Hey Google, turn off Bluetooth">Bluetooth Off</button>
+        <button data-say="Hey Google, turn on Do Not Disturb">DND On</button>
+        <button data-say="Hey Google, turn off Do Not Disturb">DND Off</button>
+        <button data-say="Hey Google, take a selfie">Take a Selfie</button>
+        <button data-say="Hey Google, take a screenshot">Take Screenshot</button>
+        <button data-say="Hey Google, open YouTube">Open YouTube</button>
+        <button data-say="Hey Google, search for cat videos on YouTube">Search Cat Videos</button>
+      </div>
+    </details>
+
+    <!-- Custom Command -->
+    <div class="card">
+      <h3>Custom Command</h3>
+      <input id="customInput" type="text" placeholder="turn on the living room lights" />
+      <div class="row">
+        <button id="speakCustom" class="secondary">Speak</button>
+        <button id="speakCustomPrefixed">Prefix with “Hey Google”</button>
+      </div>
+    </div>
+
+    <!-- Voice Tuning -->
+    <div class="card">
+      <h3>Voice Tuning</h3>
+      <div class="label">Rate: <span id="rateVal">1.00</span></div>
+      <input id="rate" type="range" min="0.5" max="1.5" step="0.01" value="1">
+      <div class="label" style="margin-top:8px;">Pitch: <span id="pitchVal">1.00</span></div>
+      <input id="pitch" type="range" min="0.75" max="1.5" step="0.01" value="1">
+      <div class="chip" id="voiceStatus">Loading voice…</div>
+    </div>
+  </main>
+
+  <script>
+    // Text-to-speech setup
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let rate = 1.0;
+    let pitch = 1.0;
+
+    function pickEnglishVoice() {
+      const voices = synth.getVoices();
+      // Prefer a Google English voice if available
+      const preferred = voices.find(v => /en-US/i.test(v.lang) && v.name && v.name.toLowerCase().includes('google'));
+      return preferred || voices.find(v => /en/i.test(v.lang)) || voices[0] || null;
+    }
+
+    function updateVoiceStatus() {
+      const chip = document.getElementById('voiceStatus');
+      if (voice) {
+        chip.textContent = 'Voice: ' + (voice.name || voice.lang);
+      } else {
+        chip.textContent = 'Default voice ready';
+      }
+    }
+
+    function speak(text) {
+      if (!text) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = voice;
+      utterance.rate = rate;
+      utterance.pitch = pitch;
+      synth.cancel();
+      synth.speak(utterance);
+    }
+
+    function init() {
+      voice = pickEnglishVoice();
+      updateVoiceStatus();
+      // Attach listeners for all buttons with data-say
+      document.querySelectorAll('[data-say]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          speak(btn.dataset.say);
+        });
+      });
+      // Brightness slider
+      const brightnessSlider = document.getElementById('brightnessSlider');
+      const brightnessVal = document.getElementById('brightnessVal');
+      brightnessSlider.addEventListener('input', e => {
+        brightnessVal.textContent = e.target.value;
+      });
+      document.getElementById('speakBrightness').addEventListener('click', () => {
+        speak(`Hey Google, set the lights to ${brightnessSlider.value} percent brightness`);
+      });
+      // Color buttons
+      document.querySelectorAll('#colorButtons .color').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const color = btn.dataset.color;
+          speak(`Hey Google, set the lights to ${color}`);
+        });
+      });
+      // Thermostat slider
+      const thermostatSlider = document.getElementById('thermostatSlider');
+      const tempVal = document.getElementById('tempVal');
+      thermostatSlider.addEventListener('input', e => {
+        tempVal.textContent = e.target.value;
+      });
+      document.getElementById('speakThermostat').addEventListener('click', () => {
+        speak(`Hey Google, set the temperature to ${thermostatSlider.value} degrees`);
+      });
+      // Custom timer
+      document.getElementById('speakTimer').addEventListener('click', () => {
+        const minutes = parseInt(document.getElementById('timerVal').value, 10);
+        if (!isNaN(minutes) && minutes > 0) {
+          speak(`Hey Google, set a ${minutes} minute timer`);
+        }
+      });
+      // Broadcast custom
+      document.getElementById('speakBroadcast').addEventListener('click', () => {
+        const msg = document.getElementById('broadcastMsg').value.trim();
+        if (msg) {
+          speak(`Hey Google, broadcast ${msg}`);
+        }
+      });
+      // Custom command
+      const customInput = document.getElementById('customInput');
+      document.getElementById('speakCustom').addEventListener('click', () => {
+        const text = customInput.value.trim();
+        if (text) speak(text);
+      });
+      document.getElementById('speakCustomPrefixed').addEventListener('click', () => {
+        const text = customInput.value.trim();
+        if (text) speak(`Hey Google, ${text}`);
+      });
+      // Rate & pitch sliders
+      const rateSlider = document.getElementById('rate');
+      const pitchSlider = document.getElementById('pitch');
+      const rateVal = document.getElementById('rateVal');
+      const pitchVal = document.getElementById('pitchVal');
+      rateSlider.addEventListener('input', e => {
+        rate = parseFloat(e.target.value);
+        rateVal.textContent = rate.toFixed(2);
+      });
+      pitchSlider.addEventListener('input', e => {
+        pitch = parseFloat(e.target.value);
+        pitchVal.textContent = pitch.toFixed(2);
+      });
+    }
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = () => {
+        init();
+      };
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>
