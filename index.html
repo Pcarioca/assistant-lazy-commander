@@ -120,6 +120,18 @@
       font-size: 12px;
       margin-top: 8px;
     }
+
+    /* Style for select elements to match the rest of the UI */
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #2a2d39;
+      background: #0f1016;
+      color: #f5f7fb;
+      font-size: 16px;
+      appearance: none;
+    }
   </style>
 </head>
 <body>
@@ -130,6 +142,24 @@
     <p class="muted">
       Use the menus below to speak commands to your Google Assistant or Gemini‑enabled devices. Buttons will speak commands through your device's speaker. Whether the Assistant responds depends on your setup—no promises. Explore lights, thermostats, timers, media, information, broadcasts, fun easter eggs, system controls, and more. Tune the voice to your liking and get creative!
     </p>
+
+    <!-- Assistant & Voice Options -->
+    <div class="card">
+      <h3>Assistant &amp; Voice</h3>
+      <div class="label">Assistant:</div>
+      <select id="assistantSelect">
+        <option value="Hey Google,">Google</option>
+        <option value="Alexa,">Alexa</option>
+        <option value="Hey Siri,">Siri</option>
+        <option value="Hi Bixby,">Bixby</option>
+        <option value="Custom">Custom…</option>
+      </select>
+      <input id="customPrefixInput" type="text" placeholder="Enter custom prefix" style="display:none; margin-top:8px;" />
+      <div class="label" style="margin-top:8px;">Voice:</div>
+      <select id="voiceSelect">
+        <option>Loading…</option>
+      </select>
+    </div>
 
     <!-- Lights -->
     <details class="card" open>
@@ -261,6 +291,18 @@
       </div>
     </details>
 
+    <!-- Routines -->
+    <details class="card">
+      <summary><h3>Routines</h3></summary>
+      <div class="row">
+        <button data-routine="morning">Good Morning</button>
+        <button data-routine="evening">Good Night</button>
+        <button data-routine="leaving">Leaving Home</button>
+        <button data-routine="arriving">Arriving Home</button>
+      </div>
+      <p class="muted" style="margin-top:8px;">Each routine will speak a sequence of commands such as adjusting lights, thermostat and media. Adjust the assistant prefix above to target your preferred assistant.</p>
+    </details>
+
     <!-- Fun & Easter Eggs -->
     <details class="card">
       <summary><h3>Fun & Easter Eggs</h3></summary>
@@ -271,6 +313,51 @@
         <button data-say="Hey Google, I am your father">I am your father</button>
         <button data-say="Hey Google, self destruct in 3 seconds">Self Destruct</button>
         <button data-say="Hey Google, who am I?">Who am I?</button>
+      </div>
+    </details>
+
+    <!-- Scenes & Modes -->
+    <details class="card">
+      <summary><h3>Scenes &amp; Modes</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, dim the lights to 20 percent and play a movie on Netflix">Movie Night</button>
+        <button data-say="Hey Google, turn on do not disturb and set the lights to white at 80 percent brightness">Work Mode</button>
+        <button data-say="Hey Google, set the lights to red and play my party playlist">Party Mode</button>
+        <button data-say="Hey Google, set the lights to blue and play some relaxing music">Relax Mode</button>
+        <button data-say="Hey Google, turn off all lights and set the thermostat to eco mode">Vacation Mode</button>
+      </div>
+    </details>
+
+    <!-- Shopping & Lists -->
+    <details class="card">
+      <summary><h3>Shopping &amp; Lists</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, add milk to my shopping list">Add Milk</button>
+        <button data-say="Hey Google, add eggs to my shopping list">Add Eggs</button>
+        <button data-say="Hey Google, what's on my shopping list?">What's on the List?</button>
+        <button data-say="Hey Google, clear my shopping list">Clear List</button>
+      </div>
+    </details>
+
+    <!-- Calendar & Reminders -->
+    <details class="card">
+      <summary><h3>Calendar &amp; Reminders</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, add a meeting on September 18th at 3 PM to my calendar">Add Meeting</button>
+        <button data-say="Hey Google, remind me to call Mom at 8 PM">Call Mom Reminder</button>
+        <button data-say="Hey Google, remind me to drink water every hour">Hydration Reminder</button>
+        <button data-say="Hey Google, what's on my calendar today?">Calendar Today</button>
+      </div>
+    </details>
+
+    <!-- Productivity -->
+    <details class="card">
+      <summary><h3>Productivity</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, start a 25 minute timer">Start Focus Timer</button>
+        <button data-say="Hey Google, start a 5 minute break timer">Start Break Timer</button>
+        <button data-say="Hey Google, play my study playlist">Play Study Playlist</button>
+        <button data-say="Hey Google, stop all timers and reminders">Stop Timers</button>
       </div>
     </details>
 
@@ -297,7 +384,7 @@
       <input id="customInput" type="text" placeholder="turn on the living room lights" />
       <div class="row">
         <button id="speakCustom" class="secondary">Speak</button>
-        <button id="speakCustomPrefixed">Prefix with “Hey Google”</button>
+        <button id="speakCustomPrefixed">Prefix &amp; Speak</button>
       </div>
     </div>
 
@@ -318,6 +405,32 @@
     let voice = null;
     let rate = 1.0;
     let pitch = 1.0;
+
+    // Prefix for assistant (e.g. Hey Google, Alexa, etc.)
+    let assistantPrefix = 'Hey Google,';
+
+    // Populate the voice selection dropdown with available voices
+    function populateVoiceOptions() {
+      const voiceSelect = document.getElementById('voiceSelect');
+      if (!voiceSelect) return;
+      const voices = synth.getVoices();
+      // Filter to English and non-empty names
+      const filtered = voices.filter(v => /en/i.test(v.lang));
+      voiceSelect.innerHTML = '';
+      filtered.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        opt.textContent = `${v.name} (${v.lang})`;
+        voiceSelect.appendChild(opt);
+      });
+      // Set current voice if exists
+      const current = (voice && filtered.find(v => v.name === voice.name)) || filtered[0];
+      if (current) {
+        voiceSelect.value = current.name;
+        voice = current;
+        updateVoiceStatus();
+      }
+    }
 
     function pickEnglishVoice() {
       const voices = synth.getVoices();
@@ -348,10 +461,45 @@
     function init() {
       voice = pickEnglishVoice();
       updateVoiceStatus();
+      populateVoiceOptions();
+      // Assistant selector handling
+      const assistantSelect = document.getElementById('assistantSelect');
+      const customPrefixInput = document.getElementById('customPrefixInput');
+      if (assistantSelect) {
+        assistantSelect.addEventListener('change', () => {
+          const val = assistantSelect.value;
+          if (val === 'Custom') {
+            customPrefixInput.style.display = 'block';
+            assistantPrefix = customPrefixInput.value || '';
+          } else {
+            customPrefixInput.style.display = 'none';
+            assistantPrefix = val;
+          }
+        });
+      }
+      if (customPrefixInput) {
+        customPrefixInput.addEventListener('input', () => {
+          assistantPrefix = customPrefixInput.value;
+        });
+      }
+      // Voice selector handling
+      const voiceSelect = document.getElementById('voiceSelect');
+      if (voiceSelect) {
+        voiceSelect.addEventListener('change', () => {
+          const selected = synth.getVoices().find(v => v.name === voiceSelect.value);
+          if (selected) {
+            voice = selected;
+            updateVoiceStatus();
+          }
+        });
+      }
       // Attach listeners for all buttons with data-say
       document.querySelectorAll('[data-say]').forEach(btn => {
         btn.addEventListener('click', () => {
-          speak(btn.dataset.say);
+          // Strip existing assistant prefix (Hey Google, Alexa, etc.) and reapply the selected prefix
+          const raw = btn.dataset.say || '';
+          const command = raw.replace(/^(Hey Google,|Alexa,|Hey Siri,|Hi Bixby,)\s*/i, '').trim();
+          speak(`${assistantPrefix} ${command}`);
         });
       });
       // Brightness slider
@@ -361,13 +509,13 @@
         brightnessVal.textContent = e.target.value;
       });
       document.getElementById('speakBrightness').addEventListener('click', () => {
-        speak(`Hey Google, set the lights to ${brightnessSlider.value} percent brightness`);
+        speak(`${assistantPrefix} set the lights to ${brightnessSlider.value} percent brightness`);
       });
       // Color buttons
       document.querySelectorAll('#colorButtons .color').forEach(btn => {
         btn.addEventListener('click', () => {
           const color = btn.dataset.color;
-          speak(`Hey Google, set the lights to ${color}`);
+          speak(`${assistantPrefix} set the lights to ${color}`);
         });
       });
       // Thermostat slider
@@ -377,20 +525,20 @@
         tempVal.textContent = e.target.value;
       });
       document.getElementById('speakThermostat').addEventListener('click', () => {
-        speak(`Hey Google, set the temperature to ${thermostatSlider.value} degrees`);
+        speak(`${assistantPrefix} set the temperature to ${thermostatSlider.value} degrees`);
       });
       // Custom timer
       document.getElementById('speakTimer').addEventListener('click', () => {
         const minutes = parseInt(document.getElementById('timerVal').value, 10);
         if (!isNaN(minutes) && minutes > 0) {
-          speak(`Hey Google, set a ${minutes} minute timer`);
+          speak(`${assistantPrefix} set a ${minutes} minute timer`);
         }
       });
       // Broadcast custom
       document.getElementById('speakBroadcast').addEventListener('click', () => {
         const msg = document.getElementById('broadcastMsg').value.trim();
         if (msg) {
-          speak(`Hey Google, broadcast ${msg}`);
+          speak(`${assistantPrefix} broadcast ${msg}`);
         }
       });
       // Custom command
@@ -401,7 +549,7 @@
       });
       document.getElementById('speakCustomPrefixed').addEventListener('click', () => {
         const text = customInput.value.trim();
-        if (text) speak(`Hey Google, ${text}`);
+        if (text) speak(`${assistantPrefix} ${text}`);
       });
       // Rate & pitch sliders
       const rateSlider = document.getElementById('rate');
@@ -415,6 +563,41 @@
       pitchSlider.addEventListener('input', e => {
         pitch = parseFloat(e.target.value);
         pitchVal.textContent = pitch.toFixed(2);
+      });
+
+      // Routine buttons
+      const routines = {
+        morning: [
+          'turn on the lights',
+          'set the temperature to 21 degrees',
+          'tell me the news'
+        ],
+        evening: [
+          'turn off the lights',
+          'set the temperature to 18 degrees',
+          'good night'
+        ],
+        leaving: [
+          'turn off all lights',
+          'lock all the doors',
+          'set the thermostat to eco mode'
+        ],
+        arriving: [
+          'turn on the lights',
+          'set the thermostat to 22 degrees',
+          'play some chill music'
+        ]
+      };
+      document.querySelectorAll('[data-routine]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.routine;
+          const cmds = routines[key] || [];
+          cmds.forEach((cmd, idx) => {
+            setTimeout(() => {
+              speak(`${assistantPrefix} ${cmd}`);
+            }, idx * 800);
+          });
+        });
       });
     }
     if (speechSynthesis.onvoiceschanged !== undefined) {
