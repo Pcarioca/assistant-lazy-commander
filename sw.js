@@ -1,6 +1,6 @@
 // Simple service worker for offline caching
 // Versioned cache name to ensure old caches are invalidated on update
-const CACHE_NAME = 'assistant-lazy-commander-v2';
+const CACHE_NAME = ''assistant-lazy-commander-v3'
 
 // Install event: cache static resources and immediately take control
 self.addEventListener('install', event => {
