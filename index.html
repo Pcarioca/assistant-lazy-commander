@@ -152,6 +152,7 @@
         <option value="Alexa,">Alexa</option>
         <option value="Hey Siri,">Siri</option>
         <option value="Hi Bixby,">Bixby</option>
+        <option value="Hey Cortana,">Cortana</option>
         <option value="Custom">Custom…</option>
       </select>
       <input id="customPrefixInput" type="text" placeholder="Enter custom prefix" style="display:none; margin-top:8px;" />
@@ -361,6 +362,54 @@
       </div>
     </details>
 
+    <!-- Travel & Navigation -->
+    <details class="card">
+      <summary><h3>Travel &amp; Navigation</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, navigate to home">Navigate Home</button>
+        <button data-say="Hey Google, navigate to work">Navigate to Work</button>
+        <button data-say="Hey Google, find the nearest gas station">Nearest Gas Station</button>
+        <button data-say="Hey Google, what’s the traffic like to the airport?">Traffic to Airport</button>
+        <button data-say="Hey Google, find restaurants near me">Nearby Restaurants</button>
+      </div>
+    </details>
+
+    <!-- Cooking & Recipes -->
+    <details class="card">
+      <summary><h3>Cooking &amp; Recipes</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, preheat the oven to 180 degrees">Preheat Oven</button>
+        <button data-say="Hey Google, set a 30 minute timer for pizza">Pizza Timer</button>
+        <button data-say="Hey Google, convert 2 cups to milliliters">Convert Cups</button>
+        <button data-say="Hey Google, how do you make pancakes?">Pancake Recipe</button>
+        <button data-say="Hey Google, start the coffee maker">Start Coffee Maker</button>
+      </div>
+    </details>
+
+    <!-- Health & Fitness -->
+    <details class="card">
+      <summary><h3>Health &amp; Fitness</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, start a 30 minute workout">30m Workout</button>
+        <button data-say="Hey Google, play my workout playlist">Workout Playlist</button>
+        <button data-say="Hey Google, how many steps have I taken today?">Step Count</button>
+        <button data-say="Hey Google, remind me to drink water every hour">Hydration Reminder</button>
+        <button data-say="Hey Google, start a guided meditation">Guided Meditation</button>
+      </div>
+    </details>
+
+    <!-- Education & Learning -->
+    <details class="card">
+      <summary><h3>Education &amp; Learning</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, define quantum mechanics">Define Quantum Mechanics</button>
+        <button data-say="Hey Google, translate hello to Spanish">Translate Hello</button>
+        <button data-say="Hey Google, spell serendipity">Spell ‘Serendipity’</button>
+        <button data-say="Hey Google, how do you say thank you in French?">Say Thank You in French</button>
+        <button data-say="Hey Google, explain photosynthesis">Explain Photosynthesis</button>
+      </div>
+    </details>
+
     <!-- System Controls -->
     <details class="card">
       <summary><h3>System Controls</h3></summary>
@@ -375,6 +424,17 @@
         <button data-say="Hey Google, take a screenshot">Take Screenshot</button>
         <button data-say="Hey Google, open YouTube">Open YouTube</button>
         <button data-say="Hey Google, search for cat videos on YouTube">Search Cat Videos</button>
+      </div>
+    </details>
+
+    <!-- Security & Surveillance -->
+    <details class="card">
+      <summary><h3>Security &amp; Surveillance</h3></summary>
+      <div class="row">
+        <button data-say="Hey Google, show me the front door camera">Show Front Door</button>
+        <button data-say="Hey Google, show me the backyard camera">Show Backyard</button>
+        <button data-say="Hey Google, arm the security system">Arm System</button>
+        <button data-say="Hey Google, disarm the security system">Disarm System</button>
       </div>
     </details>
 
@@ -498,7 +558,8 @@
         btn.addEventListener('click', () => {
           // Strip existing assistant prefix (Hey Google, Alexa, etc.) and reapply the selected prefix
           const raw = btn.dataset.say || '';
-          const command = raw.replace(/^(Hey Google,|Alexa,|Hey Siri,|Hi Bixby,)\s*/i, '').trim();
+          // Strip any known assistant prefixes from the beginning before prepending the selected prefix
+          const command = raw.replace(/^(Hey Google,|Alexa,|Hey Siri,|Hi Bixby,|Hey Cortana,)\s*/i, '').trim();
           speak(`${assistantPrefix} ${command}`);
         });
       });

@@ -6,28 +6,39 @@
 
 The app is essentially a soundboard for Google Assistant—and more. Each button or control builds a spoken command and plays it through your phone or computer’s speakers. When another Assistant‑enabled device hears the command (e.g. a Google Nest Mini, Amazon Echo, iPhone with Siri, or Samsung phone listening for “Hi Bixby”), it performs the action. You can even choose your own custom hotword.
 
+
 ### Core features
 
-- **Lights:** On/off buttons, a brightness slider, preset color buttons (red, green, blue, warm white, etc.) and one‑touch dim/brighten actions.
-- **Thermostat:** Set a specific temperature or adjust in 0.5 °C increments, with on/off controls for HVAC systems.
-- **Locks & doors:** Commands to lock/unlock doors or check status.
-- **Timers & alarms:** Quick buttons for timers (1 min, 5 min, 10 min) and alarms (morning, bedtime). You can also set custom durations.
-- **Information:** Ask for the time, date, weather, news, traffic, unit conversions, stock prices, sports scores and more.
-- **Media controls:** Play, pause, stop or skip music, podcasts and radio streams, with optional volume controls.
-- **Broadcasts:** Predefined announcements like “Dinner is ready,” “Time to wake up” or “Movie time,” plus a field for custom broadcast messages.
-- **System controls:** Toggle flashlight, Bluetooth and Do Not Disturb; take a selfie or screenshot; launch YouTube with a search query; and other common assistant shortcuts.
-- **Custom commands:** Type any phrase you want and speak it immediately, or prepend “Hey Google” automatically.
-- **Voice tuning:** Adjust the speech rate and pitch of the spoken commands to suit your environment or preference.
-- **Scenes & modes:** Predefined multi‑step scenes like *Movie Night*, *Work Mode*, *Party Mode*, *Relax Mode* and *Vacation Mode*. Each scene chains several actions in a single spoken command, such as dimming the lights, changing colors, adjusting the thermostat and starting a playlist.
-- **Shopping & lists:** Quickly add items (e.g. milk or eggs) to your shopping list, hear what’s on the list, or clear it entirely.
-- **Calendar & reminders:** Add a calendar event for a specific date and time, set personal reminders (e.g. call Mom, drink water regularly) or ask what’s on your schedule today.
-- **Productivity:** Start a Pomodoro‑style focus timer, schedule a short break, play a study playlist or cancel all timers and reminders.
+The app organizes dozens of common assistant actions into intuitive categories.  Each category is collapsible, letting you focus on the controls you need right now.
 
-In addition to the features above, the latest version introduces some powerful enhancements:
+- **Lights:** On/off buttons, a brightness slider, and preset colors (red, orange, yellow, green, blue, purple, pink and white) with one‑tap dim/brighten actions.
+- **Thermostat:** Set a specific temperature or nudge it up or down in 1 °C increments, with on/off controls.
+- **Locks & doors:** Commands to lock/unlock individual doors or all doors at once.
+- **Timers & alarms:** Quick buttons for 5‑minute, 10‑minute, 30‑minute and 1‑hour timers, plus customizable durations; alarms for common wake‑up times and cancellation.
+- **Information:** Ask for the weather, time, date, news headlines, traffic conditions, stock market updates, unit conversions, sports scores and more.
+- **Media controls:** Play jazz, workout or general music; play the latest news; pause, resume, stop, skip forward/back and adjust volume.
+- **Broadcasts:** Predefined announcements like “Wake up,” “Breakfast,” “Dinner,” “Movie time” and “Bedtime,” with a custom broadcast field to say whatever you need.
+- **System controls:** Toggle your device’s flashlight, Bluetooth and Do Not Disturb modes; take selfies or screenshots; open YouTube or run a YouTube search.
+- **Custom commands:** Type any phrase and speak it immediately, or prepend your chosen hotword.
+- **Voice tuning:** Adjust the speech rate and pitch of the spoken commands; choose from any English voice installed on your device.
+- **Scenes & modes:** Multi‑action routines like *Movie Night*, *Work Mode*, *Party Mode*, *Relax Mode* and *Vacation Mode* chain several commands (dim lights, play music, set thermostat) into a single press.
+- **Shopping & lists:** Add items like milk or eggs to your shopping list, ask what’s currently on the list, or clear the list entirely.
+- **Calendar & reminders:** Create calendar events for specific dates and times, set reminders (e.g. call Mom at 8 PM, drink water regularly) or find out what’s on your schedule.
+- **Productivity:** Kick off Pomodoro‑style focus and break timers, play your study playlist or cancel all running timers and reminders.
+- **Travel & navigation:** Ask for directions home or to work, locate the nearest gas station, check traffic to the airport, or find restaurants near you.
+- **Cooking & recipes:** Preheat the oven, set a pizza timer, convert measurements, look up recipes (like pancakes) or start the coffee maker with one tap.
+- **Health & fitness:** Start a workout or guided meditation, play your workout playlist, check your step count or set hourly hydration reminders.
+- **Education & learning:** Request definitions, translations and spellings, or get quick explanations of scientific concepts like photosynthesis or quantum mechanics.
+- **Routines:** Single‑tap routines like *Good Morning*, *Good Night*, *Leaving Home* and *Arriving Home* speak a series of commands (lights, thermostat, music) with brief pauses so your assistant can keep up.
 
-- **Assistant & voice options:** Choose which assistant to target (Google, Alexa, Siri, Bixby or a custom hotword) from a dropdown. The app automatically strips any existing hotword from commands and prepends your chosen prefix. You can also select from any of your device’s installed English voices for the speech synthesis.
-- **Routines:** One‑tap routines like *Good Morning*, *Good Night*, *Leaving Home* and *Arriving Home* speak a series of commands (turn on/off lights, adjust thermostat, play media) with short pauses in between so your assistant can execute multiple actions in sequence.
-- **Scenes, lists, calendar and productivity tools:** Dedicated sections for moods (Scenes & Modes), shopping list management, calendar events and productivity timers. These actions complement the core categories and make the app a full‑fledged control panel for your assistant.
+- **Security & surveillance:** Show live feeds from front‑door or backyard cameras and arm or disarm your smart security system.
+
+
+In addition to the core categories, the app includes several powerful enhancements:
+
+- **Assistant & voice options:** A dedicated card at the top lets you pick which assistant to target—Google, Alexa, Siri, Bixby, Cortana or even a custom hotword. Whatever prefix you choose is automatically prepended to every command (and existing prefixes are stripped out). You can also select from any English voice installed on your device and fine‑tune the speech rate and pitch.
+- **Multi‑assistant routines:** Multi‑step macros (e.g. *Good Morning*, *Good Night*, *Leaving Home*, *Arriving Home*) that speak several commands in sequence, with delays between them. Adjust the assistant prefix first and each routine will target your preferred assistant.
+- **Expanded categories:** Beyond lights and thermostats, you’ll find sections for scenes & modes, shopping & lists, calendar & reminders, productivity, travel & navigation, cooking & recipes, health & fitness, education & learning, media, broadcasts, system controls, security & surveillance and fun easter eggs. Each section houses multiple one‑tap commands and sliders.
 
 Because the app is static and runs entirely in your browser, no data is sent to any server. The service worker caches assets for offline use and updates itself when a new version is deployed.
 
@@ -67,7 +78,7 @@ It’s not limited to these groups; anyone can use it as a quick command launche
 
 ## Origin of this project
 
-This app was built end‑to‑end by **ChatGPT**, OpenAI’s large language model, using Andrei’s account with his permission. ChatGPT generated the code, service worker and UI design, zipped it into a deployable PWA, set up the Netlify deployment and configured a GitHub repository for continuous deployment. The intention is to showcase how generative AI can help build assistive tools rapidly while keeping all logic client‑side.
+This app was built end‑to‑end by **ChatGPT**, OpenAI’s large language model. Working solely from Andrei’s account (with his permission), ChatGPT authored every line of code, style and markup, assembled the PWA and service worker, created the README, packaged the project, provisioned the Netlify hosting, connected it to GitHub and configured continuous deployment. No human hand coded or modified the files—this is a fully AI‑written project. The intention is to showcase how generative AI can help build assistive tools rapidly while keeping all logic client‑side.
 
 ## License
 
